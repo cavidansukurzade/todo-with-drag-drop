@@ -4,6 +4,7 @@ import mockData from "../../mockData";
 import { useState } from "react";
 import Card from "../card";
 import { v4 as uuidv4 } from "uuid";
+import { MdDelete } from "react-icons/md";
 
 const Kanban = () => {
   const [data, setData] = useState(mockData);
@@ -29,6 +30,19 @@ const Kanban = () => {
     setData(updatedData);
     setInputValue("");
   };
+
+  const handleDeleteItem = (taskId) => {
+    console.log(taskId);
+    const updatedData = data.map((section) => {
+      return {
+        ...section,
+        tasks: section.tasks.filter((task) => task.id !== taskId),
+      };
+    });
+
+    setData(updatedData);
+  };
+
   const onDragEnd = (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
@@ -117,7 +131,12 @@ const Kanban = () => {
                                 opacity: snapshot.isDragging ? "0.5" : "1",
                               }}
                             >
-                              <Card>{task.title}</Card>
+                              <Card>
+                                <span>{task.title}</span>
+                                <span onClick={() => handleDeleteItem(task.id)}>
+                                  <MdDelete />
+                                </span>
+                              </Card>
                             </div>
                           )}
                         </Draggable>
