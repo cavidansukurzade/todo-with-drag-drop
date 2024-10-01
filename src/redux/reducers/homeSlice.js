@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { resetState } from "../reset";
 import mockData from "../../mockData";
+
 const initialState = {
   loading: false,
   tasks: mockData,
