@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetState } from "../../redux/reset";
 import { LoginRequest } from "../../redux/actions/authAction";
 import { setInputs } from "../../redux/reducers/authSlice";
+import SimpleBackdrop from "../../components/loader";
 
 const Login = () => {
   const { inputs, loading } = useSelector((store) => store.auth);
@@ -34,14 +35,26 @@ const Login = () => {
   return (
     <section className={styles.main} onSubmit={handleSubmit}>
       <form>
-        <input type="text" value={inputs.userName} onChange={handleChange} />
         <input
+          name="userName"
+          type="text"
+          placeholder="User name"
+          value={inputs.userName}
+          onChange={handleChange}
+        />
+        <input
+          name="password"
           type="password"
+          placeholder="Password"
           value={inputs.password}
           onChange={handleChange}
         />
         <button type="submit">submit</button>
-        {loading && <span>loading...</span>}
+        {loading && (
+          <span>
+            <SimpleBackdrop loading={true} />
+          </span>
+        )}
       </form>
     </section>
   );

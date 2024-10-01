@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { CheckAuth } from "./redux/actions/authAction";
 import SimpleBackdrop from "./components/loader";
+
 function App() {
   const [pageLoading, setPageLoading] = useState(true);
   const dispatch = useDispatch();

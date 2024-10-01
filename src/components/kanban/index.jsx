@@ -3,6 +3,8 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { setInputValue, setTasks } from "../../redux/reducers/homeSlice";
 import { MdDelete } from "react-icons/md";
+import { v4 as uuidv4 } from "uuid";
+import { setAuth } from "../../redux/reducers/authSlice";
 
 const Kanban = () => {
   const { tasks, inputValue } = useSelector((store) => store.home);
@@ -16,6 +18,7 @@ const Kanban = () => {
           tasks: [
             ...section.tasks,
             {
+              id: uuidv4(),
               title: inputValue,
             },
           ],
@@ -78,7 +81,9 @@ const Kanban = () => {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}
+      >
         <form onSubmit={handleSubmit} style={{ marginBottom: "40px" }}>
           <input
             style={{
@@ -91,9 +96,18 @@ const Kanban = () => {
             placeholder="New task"
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => dispatch(setInputValue(e.target.value))}
           />
         </form>
+        <button
+          style={{
+            height: "40px",
+            padding: "0 12px",
+          }}
+          onClick={() => dispatch(setAuth(false))}
+        >
+          Log Out
+        </button>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={styles.kanban}>

@@ -21,7 +21,7 @@ export const CheckAuth = createAsyncThunk(
   "auth/CheckAuth",
   async (_, thunkApi) => {
     try {
-      if (!localStorage.getItem("token")) {
+      if (localStorage.getItem("token") !== "randomgeneratedtoken") {
         return false;
       }
       await new Promise((resolve) => setTimeout(resolve, 1000));
