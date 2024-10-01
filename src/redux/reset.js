@@ -1,3 +1,3 @@
 import { createAction } from "@reduxjs/toolkit";
 
-export const resetAllStates = createAction("resetAllStates");
+export const resetState = createAction("resetState");
