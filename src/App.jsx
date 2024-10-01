@@ -1,13 +1,28 @@
-import Kanban from "./components/kanban/index";
-
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import MainRoutes from "./routes/MainRoutes";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { CheckAuth } from "./redux/actions/authAction";
+import SimpleBackdrop from "./components/loader";
 function App() {
+  const [pageLoading, setPageLoading] = useState(true);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(CheckAuth()).finally(() => {
+      setPageLoading(false);
+    });
+  }, []);
   return (
-    <div style={{ padding: "50px" }}>
-      <h1 style={{ marginBottom: "20px", textAlign: "center" }}>
-        Drag and Drop
-      </h1>
-      <Kanban />
-    </div>
+    <>
+      {pageLoading ? (
+        <SimpleBackdrop background="white" loading={true} />
+      ) : (
+        <MainRoutes />
+      )}
+      <ToastContainer />
+    </>
   );
 }
 

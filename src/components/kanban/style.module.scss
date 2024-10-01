@@ -1,0 +1,44 @@
+.kanban {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  .section {
+    width: 400px;
+    background-color: rgb(165, 160, 160);
+    padding: 10px;
+    border-radius: 10px;
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 10px 0 20px;
+    }
+
+    .content {
+      & > * ~ * {
+        margin-top: 10px;
+      }
+      .card {
+        padding: 30px;
+        background-color: #e9e5e5;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        > :nth-child(1) {
+          max-width: 80%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        > :nth-child(2) {
+          width: 28px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 28px;
+          color: red;
+        }
+      }
+    }
+  }
+}

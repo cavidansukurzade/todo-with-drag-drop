@@ -1,26 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { resetAllStates } from "../reset";
+import { resetState } from "../reset";
+import mockData from "../../mockData";
 const initialState = {
   loading: false,
-  inputs: {
-    firstName: "",
-    surName: "",
-    user: "",
-    users: [],
-    date: new Date().toISOString(),
-  },
+  tasks: mockData,
+  inputValue: "",
 };
+
 export const homeSlice = createSlice({
   name: "home",
   initialState,
   reducers: {
-    setInputs: (state, action) => {
-      state.inputs = action.payload;
+    setTasks: (state, action) => {
+      state.tasks = action.payload;
+    },
+    setInputValue: (state, action) => {
+      state.inputValue = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(resetAllStates, () => initialState);
+    builder.addCase(resetState, () => initialState);
   },
 });
+
 export default homeSlice.reducer;
-export const { setInputs } = homeSlice.actions;
+export const { setTasks, setInputValue } = homeSlice.actions;

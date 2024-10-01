@@ -1,16 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { CheckAuth, LoginRequest } from "../actions/authAction";
 import { resetState } from "../reset";
+import { CheckAuth, LoginRequest } from "../actions/authAction";
+
 const initialState = {
   auth: false,
-  loginInputs: {
+  inputs: {
     userName: "",
     password: "",
   },
-  errorInputs: {},
   loading: false,
 };
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -18,24 +19,21 @@ export const authSlice = createSlice({
     setAuth: (state, action) => {
       state.auth = action.payload;
     },
-    setUserName: (state, action) => {
-      state.loginInputs.userName = action.payload;
-    },
-    setPassword: (state, action) => {
-      state.loginInputs.password = action.payload;
+    setInputs: (state, action) => {
+      state.inputs = action.payload;
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
   },
+
   extraReducers: (builder) => {
     builder.addCase(resetState, () => initialState);
     builder.addCase(LoginRequest.fulfilled, (state, action) => {
       state.loading = false;
       if (action.payload) {
         state.auth = true;
-        state.loginInputs = initialState.loginInputs;
-        state.errorInputs = initialState.errorInputs;
+        state.inputs = initialState.inputs;
         toast.success("Uğurlu giriş", {
           position: "bottom-right",
         });
@@ -43,8 +41,6 @@ export const authSlice = createSlice({
         toast.error("Ad və ya şifrə yanlışdır", {
           position: "bottom-right",
         });
-        state.errorInputs.userName = true;
-        state.errorInputs.password = true;
       }
     });
     builder.addCase(LoginRequest.pending, (state) => {
@@ -69,5 +65,6 @@ export const authSlice = createSlice({
     });
   },
 });
+
 export default authSlice.reducer;
-export const { setAuth, setEmail, setPassword, setLoading } = authSlice.actions;
+export const { setAuth, setInputs, setLoading } = authSlice.actions;

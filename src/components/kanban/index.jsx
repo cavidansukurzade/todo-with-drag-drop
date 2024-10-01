@@ -1,24 +1,21 @@
-import "./style.scss";
+import styles from "./style.module.scss";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import mockData from "../../mockData";
-import { useState } from "react";
-import Card from "../card";
-import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { setInputValue, setTasks } from "../../redux/reducers/homeSlice";
 import { MdDelete } from "react-icons/md";
 
 const Kanban = () => {
-  const [data, setData] = useState(mockData);
-  const [inputValue, setInputValue] = useState("");
+  const { tasks, inputValue } = useSelector((store) => store.home);
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedData = data.map((section) => {
+    const updatedData = tasks.map((section) => {
       if (section.title === " 📃 To do") {
         return {
           ...section,
           tasks: [
             ...section.tasks,
             {
-              id: uuidv4(),
               title: inputValue,
             },
           ],
@@ -27,28 +24,27 @@ const Kanban = () => {
       return section;
     });
 
-    setData(updatedData);
-    setInputValue("");
+    dispatch(setTasks(updatedData));
+    dispatch(setInputValue(""));
   };
 
   const handleDeleteItem = (taskId) => {
-    console.log(taskId);
-    const updatedData = data.map((section) => {
+    const updatedData = tasks.map((section) => {
       return {
         ...section,
         tasks: section.tasks.filter((task) => task.id !== taskId),
       };
     });
 
-    setData(updatedData);
+    dispatch(setTasks(updatedData));
   };
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
 
-    const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
-    const sourceCol = data[sourceColIndex];
+    const sourceColIndex = tasks.findIndex((e) => e.id === source.droppableId);
+    const sourceCol = tasks[sourceColIndex];
     const sourceTasks = [...sourceCol.tasks];
 
     if (source.droppableId === destination.droppableId) {
@@ -56,27 +52,27 @@ const Kanban = () => {
       const [removed] = sourceTasks.splice(source.index, 1);
       sourceTasks.splice(destination.index, 0, removed);
 
-      const updatedData = [...data];
+      const updatedData = [...tasks];
       updatedData[sourceColIndex] = { ...sourceCol, tasks: sourceTasks };
-      setData(updatedData);
+      dispatch(setTasks(updatedData));
     } else {
       // Moving between different columns
-      const destinationColIndex = data.findIndex(
+      const destinationColIndex = tasks.findIndex(
         (e) => e.id === destination.droppableId
       );
-      const destinationCol = data[destinationColIndex];
+      const destinationCol = tasks[destinationColIndex];
       const destinationTasks = [...destinationCol.tasks];
 
       const [removed] = sourceTasks.splice(source.index, 1);
       destinationTasks.splice(destination.index, 0, removed);
 
-      const updatedData = [...data];
+      const updatedData = [...tasks];
       updatedData[sourceColIndex] = { ...sourceCol, tasks: sourceTasks };
       updatedData[destinationColIndex] = {
         ...destinationCol,
         tasks: destinationTasks,
       };
-      setData(updatedData);
+      dispatch(setTasks(updatedData));
     }
   };
 
@@ -100,20 +96,18 @@ const Kanban = () => {
         </form>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="kanban">
-          {data.map((section) => (
+        <div className={styles.kanban}>
+          {tasks.map((section) => (
             <div key={section.id}>
               <Droppable droppableId={section.id}>
                 {(provided) => (
                   <div
                     {...provided.droppableProps}
-                    className="kanban__section"
+                    className={styles.section}
                     ref={provided.innerRef}
                   >
-                    <div className="kanban__section__title">
-                      {section.title}
-                    </div>
-                    <div className="kanban__section__content">
+                    <div className={styles.title}>{section.title}</div>
+                    <div className={styles.content}>
                       {section.tasks.map((task, index) => (
                         <Draggable
                           key={task.id}
@@ -131,12 +125,12 @@ const Kanban = () => {
                                 opacity: snapshot.isDragging ? "0.5" : "1",
                               }}
                             >
-                              <Card>
+                              <div className={styles.card}>
                                 <span>{task.title}</span>
                                 <span onClick={() => handleDeleteItem(task.id)}>
                                   <MdDelete />
                                 </span>
-                              </Card>
+                              </div>
                             </div>
                           )}
                         </Draggable>
