@@ -1,9 +1,9 @@
 import { Outlet } from "react-router";
 const InnerContent = () => {
   return (
-    <div id="inner-content">
+    <main id="inner-content">
       <Outlet />
-    </div>
+    </main>
   );
 };
 

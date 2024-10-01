@@ -1,11 +1,7 @@
-import './style.scss'
+import "./style.scss";
 
-const Card = props => {
-    return (
-        <div className='card'>
-            {props.children}
-        </div>
-    )
-}
+const Card = (props) => {
+  return <div className="card">{props.children}</div>;
+};
 
-export default Card
+export default Card;
