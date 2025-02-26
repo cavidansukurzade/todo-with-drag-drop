@@ -35,6 +35,7 @@ const Login = () => {
   return (
     <section className={styles.main} onSubmit={handleSubmit}>
       <form>
+        <h4>Login:cavidan<br/>Password:123</h4>
         <input
           name="userName"
           type="text"
